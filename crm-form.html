@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Visibyl CRM Lead Form</title>
+
+  <!-- Use Poppins for headings and Inter for body for a clean corporate look -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#f7fafc;
+      --card:#ffffff;
+      --primary:#0041cc;      /* slightly deeper accent */
+      --primary-2:#007bff;
+      --muted:#6b7280;
+      --text:#0b1b2b;
+      --radius:12px;
+      --shadow-1: 0 8px 30px rgba(8,20,40,0.06);
+      --glass: rgba(255,255,255,0.6);
+      --container:1100px;
+      --gap:16px;
+    }
+
+    /* Reset & base */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg, var(--bg), #ffffff);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:28px;
+      line-height:1.45;
+    }
+
+    .page {
+      max-width: var(--container);
+      margin: 18px auto;
+      padding: 20px;
+    }
+
+    /* Card */
+    .lead-card{
+      background:var(--card);
+      border-radius:16px;
+      box-shadow:var(--shadow-1);
+      padding:28px;
+      border:1px solid #eef3fb;
+      overflow:hidden;
+    }
+
+    /* Header */
+    .lead-head{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      margin-bottom:18px;
+    }
+    .brand-badge{
+      width:56px;height:56px;border-radius:10px;
+      background:linear-gradient(135deg,var(--primary),var(--primary-2));
+      display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-family:"Poppins",sans-serif;font-size:20px;
+      box-shadow:0 8px 28px rgba(1,60,160,0.12);
+    }
+    .lead-title{
+      font-family:"Poppins",sans-serif;
+      font-size:20px;
+      font-weight:700;
+      margin:0;
+      color:var(--primary);
+      letter-spacing:0.2px;
+    }
+    .lead-sub{
+      margin:0;color:var(--muted);font-size:0.95rem;
+    }
+
+    /* Note */
+    .page-note {
+      background: linear-gradient(90deg,#f1f7ff,#ffffff);
+      border:1px solid #e6f0ff;
+      padding:10px 12px;
+      border-radius:10px;
+      color:var(--muted);
+      font-size:0.95rem;
+      margin-bottom:18px;
+    }
+
+    /* Form grid (mobile first) */
+    form.crm-form{display:grid;gap:14px}
+    label{display:block;font-weight:600;font-size:0.95rem;margin-bottom:6px;color:#122232}
+    input[type="text"], input[type="email"], input[type="tel"], input[type="url"],
+    textarea, select, input[type="date"]{
+      width:100%;
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid #e6eef7;
+      background:#fff;
+      font-size:0.97rem;
+      color:var(--text);
+      transition:box-shadow .18s ease, border-color .18s ease, transform .12s ease;
+    }
+    textarea{min-height:120px; resize:vertical; padding-top:12px}
+    input:focus, select:focus, textarea:focus{
+      outline:none;
+      border-color:var(--primary);
+      box-shadow:0 8px 30px rgba(3,91,255,0.12);
+      transform:translateY(-1px);
+    }
+
+    /* Section title */
+    .section-title{
+      display:flex;align-items:center;gap:10px;margin-top:8px;
+      font-weight:700;color:var(--primary);font-family:"Poppins",sans-serif;font-size:15px;
+      border-left:4px solid var(--primary); padding-left:12px;
+      margin-bottom:6px;
+    }
+
+    /* Two-column layout on larger screens */
+    .row{display:grid;grid-template-columns:1fr;gap:12px}
+    @media(min-width:900px){
+      .two-col{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+      .lead-card{padding:32px}
+      form.crm-form{gap:18px}
+    }
+
+    /* Submit area */
+    .actions{display:flex;gap:12px;align-items:center;margin-top:6px}
+    .btn{
+      background:linear-gradient(90deg,var(--primary),var(--primary-2));
+      color:#fff;padding:12px 16px;border-radius:10px;border:none;font-weight:700;cursor:pointer;
+      display:inline-flex;align-items:center;gap:10px;box-shadow:0 10px 34px rgba(1,60,160,0.12);
+      transition:transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+      font-size:15px;
+    }
+    .btn:disabled{opacity:.7;cursor:not-allowed;transform:none;box-shadow:none}
+    .btn:hover:not(:disabled){transform:translateY(-3px)}
+
+    /* Inline small secondary button */
+    .btn-ghost{
+      background:transparent;border:1px solid #e6eef7;padding:10px 12px;border-radius:10px;color:var(--muted);font-weight:600;
+    }
+
+    /* Spinner inside button */
+    .spinner{
+      width:18px;height:18px;border-radius:50%;
+      border:3px solid rgba(255,255,255,0.22);
+      border-top-color:rgba(255,255,255,0.95);
+      animation:spin .9s linear infinite;
+      display:inline-block;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* Success & error messages */
+    .msg{
+      padding:12px;border-radius:10px;font-weight:600;font-size:0.95rem;
+    }
+    .msg.success{background:#eafbf0;color:#0b7a2b;border:1px solid rgba(11,122,43,0.08)}
+    .msg.error{background:#fff2f0;color:#b72828;border:1px solid rgba(183,40,40,0.06)}
+
+    /* Footer small note */
+    .footer-note{margin-top:18px;color:var(--muted);font-size:0.92rem;text-align:center}
+
+    /* Small responsive tweaks */
+    @media(max-width:420px){
+      .lead-card{padding:18px}
+      .brand-badge{width:48px;height:48px;font-size:18px}
+      body{padding:18px}
+    }
+
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="lead-card" role="region" aria-label="Lead capture form">
+      <div class="lead-head">
+        <div class="brand-badge">V</div>
+        <div>
+          <h1 class="lead-title">Visibyl — CRM Lead Capture</h1>
+          <p class="lead-sub">High-conversion lead form — professional, responsive, and easy to use.</p>
+        </div>
+      </div>
+
+      <div class="page-note">
+        <strong>Note:</strong> Please fill accurate contact details. Submissions go to your secured sheet and will appear in the CRM dashboard for follow-up.
+      </div>
+
+      <form id="crmForm" class="crm-form" autocomplete="on" novalidate>
+        <div class="section-title">1 — Lead Information</div>
+
+        <div class="row">
+          <div>
+            <label for="fullName">Full name <span aria-hidden="true" style="color:#b72828">*</span></label>
+            <input id="fullName" name="fullName" type="text" placeholder="e.g. John Doe" required />
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <label for="businessName">Business name</label>
+            <input id="businessName" name="businessName" type="text" placeholder="Company or brand name"/>
+          </div>
+          <div>
+            <label for="email">Email address <span aria-hidden="true" style="color:#b72828">*</span></label>
+            <input id="email" name="email" type="email" placeholder="name@company.com" required />
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <label for="phone">Phone number <span aria-hidden="true" style="color:#b72828">*</span></label>
+            <input id="phone" name="phone" type="tel" placeholder="+234 812 345 6789" required />
+          </div>
+          <div>
+            <label for="website">Website (optional)</label>
+            <input id="website" name="website" type="url" placeholder="https://example.com" />
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <label for="country">Country</label>
+            <input id="country" name="country" type="text" placeholder="Country" />
+          </div>
+          <div>
+            <label for="state">State</label>
+            <input id="state" name="state" type="text" placeholder="State / Province" />
+          </div>
+        </div>
+
+        <div>
+          <label for="industry">Business industry</label>
+          <input id="industry" name="industry" type="text" placeholder="e.g. E-commerce, Real Estate" />
+        </div>
+
+        <div class="section-title">2 — Sales Qualification</div>
+
+        <div class="two-col">
+          <div>
+            <label for="service">Service of interest <span aria-hidden="true" style="color:#b72828">*</span></label>
+            <select id="service" name="service" required>
+              <option value="">— Select service —</option>
+              <option>Website Design</option>
+              <option>AI Lead Generator</option>
+              <option>AI Chatbot</option>
+              <option>Cold Email AI</option>
+              <option>SEO / MEO</option>
+              <option>Online Ads</option>
+              <option>Branding</option>
+              <option>Others</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="budget">Budget range</label>
+            <input id="budget" name="budget" type="text" placeholder="$ — e.g. 200 - 1200" />
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <label for="source">Lead source</label>
+            <select id="source" name="source">
+              <option value="">— Select source —</option>
+              <option>Google Maps</option>
+              <option>Cold Call</option>
+              <option>WhatsApp</option>
+              <option>Instagram</option>
+              <option>Referral</option>
+              <option>LinkedIn</option>
+              <option>Email</option>
+              <option>Others</option>
+            </select>
+          </div>
+          <div>
+            <label for="stage">Business stage</label>
+            <select id="stage" name="stage">
+              <option value="">— Select stage —</option>
+              <option>Startup</option>
+              <option>Growing</option>
+              <option>Established</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section-title">3 — Lead Tracking</div>
+
+        <div class="two-col">
+          <div>
+            <label for="status">Lead status / stage</label>
+            <select id="status" name="status">
+              <option>New Lead</option>
+              <option>Contacted</option>
+              <option>Follow-Up</option>
+              <option>Proposal Sent</option>
+              <option>Negotiation</option>
+              <option>Closed – Won</option>
+              <option>Closed – Lost</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="followUp">Follow-up date</label>
+            <input id="followUp" name="followUp" type="date" />
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <label for="salesRep">Assigned sales rep <span aria-hidden="true" style="color:#b72828">*</span></label>
+            <input id="salesRep" name="salesRep" type="text" placeholder="Sales rep name" required />
+          </div>
+          <div>
+            <label for="notes">Notes / remarks</label>
+            <textarea id="notes" name="notes" placeholder="Add any remarks..."></textarea>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="submitBtn" class="btn" type="submit" aria-live="polite">
+            <span id="btnText">Submit Lead</span>
+            <span id="btnSpinner" style="display:none;margin-left:6px"><span class="spinner" aria-hidden="true"></span></span>
+          </button>
+
+          <button id="resetBtn" type="button" class="btn-ghost" onclick="document.getElementById('crmForm').reset()">Reset</button>
+
+          <div id="formMessage" style="margin-left:auto;min-width:220px"></div>
+        </div>
+      </form>
+
+      <div class="footer-note">Note: Fields marked with <span style="color:#b72828">*</span> are required. Submissions are saved to your secured CRM and Google Sheet for tracking.</div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const form = document.getElementById('crmForm');
+      const submitBtn = document.getElementById('submitBtn');
+      const btnText = document.getElementById('btnText');
+      const btnSpinner = document.getElementById('btnSpinner');
+      const formMessage = document.getElementById('formMessage');
+
+      // Your Google Apps Script URL (unchanged)
+      const scriptURL = "https://script.google.com/macros/s/AKfycbyLMI2DZAidMMAk7b78rXfXDjEWP6DqhCy6lYh7I2KP9Amb7Pi8-5EVaVuUIveYjBcbvQ/exec";
+
+      // Helper to show messages
+      function showMessage(type, text){
+        formMessage.innerHTML = '';
+        const div = document.createElement('div');
+        div.className = 'msg ' + (type === 'success' ? 'success' : 'error');
+        div.textContent = text;
+        formMessage.appendChild(div);
+      }
+
+      // Basic required fields validation
+      function validate(){
+        const required = ['fullName','email','phone','service','salesRep'];
+        for (let id of required){
+          const el = document.getElementById(id);
+          if (!el || !el.value || !el.value.toString().trim()){
+            el && el.focus();
+            return { ok:false, which:id };
+          }
+        }
+        return { ok:true };
+      }
+
+      // Toggle loading state
+      function setLoading(on){
+        if (on){
+          submitBtn.setAttribute('disabled','disabled');
+          btnSpinner.style.display = 'inline-block';
+          btnText.textContent = 'Submitting...';
+        } else {
+          submitBtn.removeAttribute('disabled');
+          btnSpinner.style.display = 'none';
+          btnText.textContent = 'Submit Lead';
+        }
+      }
+
+      form.addEventListener('submit', async function(e){
+        e.preventDefault();
+        formMessage.innerHTML = '';
+
+        // client-side validation
+        const v = validate();
+        if (!v.ok){
+          showMessage('error','Please fill the required field.');
+          return;
+        }
+
+        // build the payload
+        const leadId = 'LD-' + Date.now().toString().slice(-6);
+        const submissionDate = new Date().toISOString();
+        const payload = {
+          leadId,
+          submissionDate,
+          fullName: document.getElementById('fullName').value.trim(),
+          businessName: document.getElementById('businessName').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          country: document.getElementById('country').value.trim(),
+          state: document.getElementById('state').value.trim(),
+          industry: document.getElementById('industry').value.trim(),
+          website: document.getElementById('website').value.trim(),
+          service: document.getElementById('service').value,
+          budget: document.getElementById('budget').value.trim(),
+          source: document.getElementById('source').value,
+          stage: document.getElementById('stage').value,
+          status: document.getElementById('status').value,
+          followup: document.getElementById('followUp').value,
+          salesRep: document.getElementById('salesRep').value.trim(),
+          notes: document.getElementById('notes').value.trim()
+        };
+
+        try {
+          setLoading(true);
+
+          // Use fetch. Google Apps Script commonly needs no-cors; we'll still try a normal POST
+          await fetch(scriptURL, {
+            method: 'POST',
+            mode: 'no-cors', // preserves behavior with Google Apps Script URL
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          // show success (we can't reliably inspect response with no-cors)
+          showMessage('success', '✅ Lead submitted successfully. It will appear in your CRM shortly.');
+          form.reset();
+
+        } catch (err){
+          console.error(err);
+          showMessage('error', '❌ Submission failed. Please try again or contact admin.');
+        } finally {
+          setLoading(false);
+          // hide message after 6s
+          setTimeout(()=>{ formMessage.innerHTML = ''; }, 6000);
+        }
+      });
+
+    })();
+  </script>
+</body>
+</html>
